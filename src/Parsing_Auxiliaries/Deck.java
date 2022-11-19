@@ -9,12 +9,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-class Deck {
-    int size;
+public class Deck {
 
-    ArrayList<Card> cards;
-    void inputDeck(ArrayList<CardInput> deckInput, int size) {
-        this.size = size;
+    ArrayList<Card> cards = new ArrayList<Card>();
+    Deck(ArrayList<CardInput> deckInput, int size) {
         for(int i = 0; i < size; i++) {
             if(deckInput.get(i).getName().equals("Heart Hound") || deckInput.get(i).getName().equals("Firestorm") || deckInput.get(i).getName().equals("Winterfell")){
                 Environment env = new Environment();
@@ -30,5 +28,11 @@ class Deck {
     void ShuffleDeck(int rndSeed) {
         Random rnd = new Random(rndSeed);
         Collections.shuffle(this.cards, rnd);
+    }
+
+
+
+    public ArrayList<Card> getCards() {
+        return cards;
     }
 }

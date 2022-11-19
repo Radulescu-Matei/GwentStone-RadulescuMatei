@@ -1,5 +1,6 @@
 package Parsing_Auxiliaries;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import fileio.ActionsInput;
 import fileio.GameInput;
 import fileio.Input;
@@ -7,31 +8,35 @@ import fileio.Input;
 import java.util.ArrayList;
 
 public class GameInstances {
-    ArrayList<Deck> PlayerOneDecks;
-    ArrayList<Deck> PlayerTwoDecks;
+    ArrayList<Deck> PlayerOneDecks = new ArrayList<Deck>();
+    ArrayList<Deck> PlayerTwoDecks = new ArrayList<Deck>();;
     ArrayList<GameInput> games;
+
+    int shuffleSeed;
 
 
 
     public GameInstances(Input input) {
         for(int i = 0; i < input.getPlayerOneDecks().getNrDecks(); i++) {
-            this.PlayerOneDecks.get(i).inputDeck(input.getPlayerOneDecks().getDecks().get(i), input.getPlayerOneDecks().getNrCardsInDeck());
+
+        Deck deck = new Deck(input.getPlayerOneDecks().getDecks().get(i), input.getPlayerOneDecks().getNrCardsInDeck());
+            this.PlayerOneDecks.add(deck);
         }
 
         for(int i = 0; i < input.getPlayerTwoDecks().getNrDecks(); i++) {
-            this.PlayerTwoDecks.get(i).inputDeck(input.getPlayerTwoDecks().getDecks().get(i), input.getPlayerOneDecks().getNrCardsInDeck());
+            Deck deck =  new Deck(input.getPlayerTwoDecks().getDecks().get(i), input.getPlayerOneDecks().getNrCardsInDeck());
+            this.PlayerTwoDecks.add(deck);
         }
 
         this.games = input.getGames();
     }
 
-    public void runGames() {
+    public void runGames(ArrayNode finalOut) {
         for (int i = 0; i < games.size(); i++) {
-            GameTable table = new GameTable(this.PlayerOneDecks.get(this.games.get(i).getStartGame().getPlayerOneDeckIdx()), this.PlayerTwoDecks.get(this.games.get(i).getStartGame().getPlayerOneDeckIdx()), games.get(i).getActions(), this.games.get(i).getStartGame().getPlayerOneHero(), this.games.get(i).getStartGame().getPlayerTwoHero(), this.games.get(i).getStartGame().getStartingPlayer());
-            table.executeGame();
+            GameTable table = new GameTable(this.PlayerOneDecks.get(this.games.get(i).getStartGame().getPlayerOneDeckIdx()), this.PlayerTwoDecks.get(this.games.get(i).getStartGame().getPlayerTwoDeckIdx()), games.get(i).getActions(), this.games.get(i).getStartGame().getPlayerOneHero(), this.games.get(i).getStartGame().getPlayerTwoHero(), this.games.get(i).getStartGame().getStartingPlayer(), this.games.get(i).getStartGame().getShuffleSeed());
+            table.executeGame(finalOut);
         }
     }
-
 
 
 
