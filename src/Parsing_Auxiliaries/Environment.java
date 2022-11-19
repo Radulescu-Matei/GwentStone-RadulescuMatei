@@ -15,27 +15,6 @@ public class Environment extends Card {
         this.description = cInp.getDescription();
         this.mana = cInp.getMana();
     }
-    void playCard(int row){
-
-        if(this.name.equals("Firestorm")) {
-            this.Firestorm(row);
-        }else if(this.name.equals("Winterfell")) {
-            this.Winterfell(row);
-        }else if(this.name.equals("HeartHound")) {
-            this.HearthHound(row);
-        }
-    }
-    private void Firestorm(int row) {
-
-    }
-
-    private void Winterfell(int row) {
-
-    }
-
-    private void HearthHound(int row) {
-
-    }
 }
 
 

@@ -11,6 +11,9 @@ public abstract class Card {
     ArrayList<String> colors;
     String name;
 
+    Card(){
+
+    }
     public int getMana() {
         return mana;
     }
