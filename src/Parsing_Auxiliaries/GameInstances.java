@@ -11,6 +11,9 @@ public class GameInstances {
     ArrayList<Deck> PlayerOneDecks = new ArrayList<Deck>();
     ArrayList<Deck> PlayerTwoDecks = new ArrayList<Deck>();;
     ArrayList<GameInput> games;
+    int playerOneWins = 0;
+    int playerTwoWins = 0;
+    int gamesPlayed = 0;
 
     int shuffleSeed;
 
@@ -33,8 +36,11 @@ public class GameInstances {
 
     public void runGames(ArrayNode finalOut) {
         for (int i = 0; i < this.games.size(); i++) {
-            GameTable table = new GameTable(this.PlayerOneDecks.get(this.games.get(i).getStartGame().getPlayerOneDeckIdx()), this.PlayerTwoDecks.get(this.games.get(i).getStartGame().getPlayerTwoDeckIdx()), games.get(i).getActions(), this.games.get(i).getStartGame().getPlayerOneHero(), this.games.get(i).getStartGame().getPlayerTwoHero(), this.games.get(i).getStartGame().getStartingPlayer(), this.games.get(i).getStartGame().getShuffleSeed());
+            GameTable table = new GameTable(this.PlayerOneDecks.get(this.games.get(i).getStartGame().getPlayerOneDeckIdx()), this.PlayerTwoDecks.get(this.games.get(i).getStartGame().getPlayerTwoDeckIdx()), games.get(i).getActions(), this.games.get(i).getStartGame().getPlayerOneHero(), this.games.get(i).getStartGame().getPlayerTwoHero(), this.games.get(i).getStartGame().getStartingPlayer(), this.games.get(i).getStartGame().getShuffleSeed(), this.playerOneWins, this.playerTwoWins, this.gamesPlayed);
+            this.gamesPlayed++;
             table.executeGame(finalOut);
+            this.playerOneWins = table.playerOneWins;
+            this.playerTwoWins = table.playerTwoWins;
         }
     }
 

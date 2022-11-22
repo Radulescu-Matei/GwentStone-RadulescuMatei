@@ -156,6 +156,17 @@ public class Actions {
             table.cardAbility(aux,action);
         }else if(action.getCommand().equals("useAttackHero")){
             table.attackHero(aux, action);
+        }else if(action.getCommand().equals("useHeroAbility")){
+            table.useHeroAbility(aux, action);
+        }else if(action.getCommand().equals("getTotalGamesPlayed")){
+            aux.put("command", action.getCommand());
+            aux.put("output", table.getGames());
+        }else if(action.getCommand().equals("getPlayerOneWins")){
+            aux.put("command", action.getCommand());
+            aux.put("output", table.getPlayerOneWins());
+        }else if(action.getCommand().equals("getPlayerTwoWins")){
+            aux.put("command", action.getCommand());
+            aux.put("output", table.getPlayerTwoWins());
         }
     }
 }

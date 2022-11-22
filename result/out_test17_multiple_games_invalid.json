@@ -136,6 +136,15 @@
     "name" : "Disciple"
   } ]
 }, {
+  "command" : "getTotalGamesPlayed",
+  "output" : 0
+}, {
+  "command" : "getPlayerTwoWins",
+  "output" : 1
+}, {
+  "command" : "getPlayerOneWins",
+  "output" : 0
+}, {
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
@@ -355,4 +364,13 @@
     "colors" : [ "Yellow", "Orange", "Red" ],
     "name" : "Miraj"
   } ]
+}, {
+  "command" : "getTotalGamesPlayed",
+  "output" : 1
+}, {
+  "command" : "getPlayerTwoWins",
+  "output" : 1
+}, {
+  "command" : "getPlayerOneWins",
+  "output" : 1
 } ]

@@ -6,9 +6,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.ActionsInput;
 import fileio.CardInput;
-import fileio.DecksInput;
-import fileio.Input;
-import org.jetbrains.annotations.NotNull;
+
 
 import java.util.ArrayList;
 
@@ -20,10 +18,12 @@ public class GameTable {
     int turnCounter;
 
     int currentPlayer, startingPlayer;
+    int playerOneWins, playerTwoWins, games;
     Actions actions;
 
-  GameTable(Deck PlayerOne, Deck PlayerTwo, ArrayList<ActionsInput> actions, CardInput hero1 ,CardInput hero2, int startingPlayer, int shuffleSeed){
-    Hero H1 = new Hero(hero1), H2 = new Hero(hero2);
+  GameTable(Deck PlayerOne, Deck PlayerTwo, ArrayList<ActionsInput> actions, CardInput hero1 ,CardInput hero2, int startingPlayer, int shuffleSeed, int playerOneWins, int playerTwoWins, int games){
+    Hero H1 = new Hero(hero1);
+    Hero H2 = new Hero(hero2);
 
     Player P1 = new Player(H1, PlayerOne, shuffleSeed);
     Player P2 = new Player(H2, PlayerTwo, shuffleSeed);
@@ -36,7 +36,9 @@ public class GameTable {
     this.startingPlayer = startingPlayer;
     this.turnCounter = 1;
     this.actions = new Actions(actions);
-
+    this.playerOneWins = playerOneWins;
+    this.playerTwoWins = playerTwoWins;
+    this.games = games;
     this.minions.add(new ArrayList<>());
     this.minions.add(new ArrayList<>());
     this.minions.add(new ArrayList<>());
@@ -499,12 +501,15 @@ public class GameTable {
           if(this.currentPlayer == 1){
               this.getPlayers().get(1).getChosenHero().health -= damage;
               if(this.getPlayers().get(1).getChosenHero().getHealth() <= 0){
+                  this.playerOneWins++;
+
                   aux.put("gameEnded", "Player one killed the enemy hero.");
               }
           }else {
               this.getPlayers().get(0).getChosenHero().health -= damage;
 
               if(this.getPlayers().get(0).getChosenHero().getHealth() <= 0){
+                  this.playerTwoWins++;
                   aux.put("gameEnded", "Player two killed the enemy hero.");
               }
           }
@@ -512,7 +517,149 @@ public class GameTable {
       }
   }
 
+  public void useHeroAbility(ObjectNode aux, ActionsInput action){
+    if(this.getPlayers().get(this.currentPlayer - 1).getMana() < this.getPlayers().get(this.currentPlayer - 1).getChosenHero().getMana()){
+        aux.put("command", action.getCommand());
+        aux.put("affectedRow", action.getAffectedRow());
+        aux.put("error", "Not enough mana to use hero's ability.");
+    }else if(this.getPlayers().get(this.currentPlayer - 1).hasAttacked == 1){
+        aux.put("command", action.getCommand());
+        aux.put("affectedRow", action.getAffectedRow());
+        aux.put("error", "Hero has already attacked this turn.");
+    }else if(this.currentPlayer == 1){
+        if(this.getPlayers().get(0).getChosenHero().getName().equals("Lord Royce") || this.getPlayers().get(0).getChosenHero().getName().equals("Empress Thorina")){
+            if(action.getAffectedRow() == 2 || action.getAffectedRow() == 3){
+                aux.put("command", action.getCommand());
+                aux.put("affectedRow", action.getAffectedRow());
+                aux.put("error", "Selected row does not belong to the enemy.");
+                return;
+            }
 
+          if(this.getPlayers().get(0).getChosenHero().getName().equals("Lord Royce")){
+              int maxAttack = -1;
+              int idx = -1;
+
+              for(int i = 0; i < this.getMinions().get(action.getAffectedRow()).size(); i++){
+                  if(this.getMinions().get(action.getAffectedRow()).get(i).getAttackDamage() > maxAttack){
+                      maxAttack = this.getMinions().get(action.getAffectedRow()).get(i).getAttackDamage();
+                      idx = i;
+                  }
+              }
+
+              this.getMinions().get(action.getAffectedRow()).get(idx).setIsFrozen(1);
+              this.getPlayers().get(0).mana -= this.getPlayers().get(0).getChosenHero().getMana();
+              this.getPlayers().get(0).hasAttacked = 1;
+
+          }else {
+              int maxHealth = -1;
+              int idx = -1;
+
+              for(int i = 0; i < this.getMinions().get(action.getAffectedRow()).size(); i++){
+                  if(this.getMinions().get(action.getAffectedRow()).get(i).getHealth() > maxHealth){
+                      maxHealth = this.getMinions().get(action.getAffectedRow()).get(i).getHealth();
+                      idx = i;
+                  }
+              }
+
+              this.getMinions().get(action.getAffectedRow()).remove(idx);
+              this.getPlayers().get(0).mana -= this.getPlayers().get(0).getChosenHero().getMana();
+              this.getPlayers().get(0).hasAttacked = 1;
+          }
+        }else {
+            if(action.getAffectedRow() == 0 || action.getAffectedRow() == 1){
+                aux.put("command", action.getCommand());
+                aux.put("affectedRow", action.getAffectedRow());
+                aux.put("error", "Selected row does not belong to the current player.");
+                return;
+            }
+
+            if(this.getPlayers().get(0).getChosenHero().getName().equals("King Mudface")){
+
+                for(int i = 0; i < this.getMinions().get(action.getAffectedRow()).size(); i++){
+                    this.getMinions().get(action.getAffectedRow()).get(i).health += 1;
+                }
+
+                this.getPlayers().get(0).mana -= this.getPlayers().get(0).getChosenHero().getMana();
+                this.getPlayers().get(0).hasAttacked = 1;
+            }else {
+
+                for(int i = 0; i < this.getMinions().get(action.getAffectedRow()).size(); i++){
+                    this.getMinions().get(action.getAffectedRow()).get(i).attackDamage += 1;
+                }
+
+                this.getPlayers().get(0).mana -= this.getPlayers().get(0).getChosenHero().getMana();
+                this.getPlayers().get(0).hasAttacked = 1;
+            }
+        }
+
+    }else {
+        if(this.getPlayers().get(1).getChosenHero().getName().equals("Lord Royce") || this.getPlayers().get(1).getChosenHero().getName().equals("Empress Thorina")){
+            if(action.getAffectedRow() == 1 || action.getAffectedRow() == 0){
+                aux.put("command", action.getCommand());
+                aux.put("affectedRow", action.getAffectedRow());
+                aux.put("error", "Selected row does not belong to the enemy.");
+                return;
+            }
+
+            if(this.getPlayers().get(1).getChosenHero().getName().equals("Lord Royce")){
+                int maxAttack = -1;
+                int idx = -1;
+
+                for(int i = 0; i < this.getMinions().get(action.getAffectedRow()).size(); i++){
+                    if(this.getMinions().get(action.getAffectedRow()).get(i).getAttackDamage() > maxAttack){
+                        maxAttack = this.getMinions().get(action.getAffectedRow()).get(i).getAttackDamage();
+                        idx = i;
+                    }
+                }
+
+                if(this.getMinions().get(action.getAffectedRow()).size() != 0)
+                    this.getMinions().get(action.getAffectedRow()).get(idx).setIsFrozen(1);
+                this.getPlayers().get(1).mana -= this.getPlayers().get(1).getChosenHero().getMana();
+                this.getPlayers().get(1).hasAttacked = 1;
+            }else {
+                int maxHealth = -1;
+                int idx = -1;
+
+                for(int i = 0; i < this.getMinions().get(action.getAffectedRow()).size(); i++){
+                    if(this.getMinions().get(action.getAffectedRow()).get(i).getHealth() > maxHealth){
+                        maxHealth = this.getMinions().get(action.getAffectedRow()).get(i).getHealth();
+                        idx = i;
+                    }
+                }
+
+                if(this.getMinions().get(action.getAffectedRow()).size() != 0)
+                    this.getMinions().get(action.getAffectedRow()).remove(idx);
+                this.getPlayers().get(1).mana -= this.getPlayers().get(1).getChosenHero().getMana();
+                this.getPlayers().get(1).hasAttacked = 1;
+            }
+        }else {
+            if(action.getAffectedRow() == 2 || action.getAffectedRow() == 3){
+                aux.put("command", action.getCommand());
+                aux.put("affectedRow", action.getAffectedRow());
+                aux.put("error", "Selected row does not belong to the current player.");
+                return;
+            }
+
+            if(this.getPlayers().get(1).getChosenHero().getName().equals("King Mudface")){
+
+                for(int i = 0; i < this.getMinions().get(action.getAffectedRow()).size(); i++){
+                    this.getMinions().get(action.getAffectedRow()).get(i).health += 1;
+                }
+
+                this.getPlayers().get(1).mana -= this.getPlayers().get(1).getChosenHero().getMana();
+                this.getPlayers().get(1).hasAttacked = 1;
+            }else {
+
+                for(int i = 0; i < this.getMinions().get(action.getAffectedRow()).size(); i++){
+                    this.getMinions().get(action.getAffectedRow()).get(i).attackDamage += 1;
+                }
+
+                this.getPlayers().get(1).mana -= this.getPlayers().get(1).getChosenHero().getMana();
+                this.getPlayers().get(1).hasAttacked = 1;
+            }
+        }
+    }
+  }
   void executeGame(ArrayNode finalOut) {
         this.players.get(0).playerHand.add(this.players.get(0).chosenDeck.getCards().get(0));
         this.players.get(0).chosenDeck.getCards().remove(0);
@@ -546,6 +693,30 @@ public class GameTable {
 
     public void setMinions(ArrayList<ArrayList<Minion>> minions) {
         this.minions = minions;
+    }
+
+    public int getPlayerOneWins() {
+        return playerOneWins;
+    }
+
+    public void setPlayerOneWins(int playerOneWins) {
+        this.playerOneWins = playerOneWins;
+    }
+
+    public int getGames() {
+        return games;
+    }
+
+    public void setGames(int games) {
+        this.games = games;
+    }
+
+    public int getPlayerTwoWins() {
+        return playerTwoWins;
+    }
+
+    public void setPlayerTwoWins(int playerTwoWins) {
+        this.playerTwoWins = playerTwoWins;
     }
 }
 
