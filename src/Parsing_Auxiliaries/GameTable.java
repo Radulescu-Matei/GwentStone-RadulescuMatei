@@ -512,9 +512,7 @@ public class GameTable {
       }
   }
 
-  public void useHeroAbility(ObjectNode aux, ActionsInput action){
 
-  }
   void executeGame(ArrayNode finalOut) {
         this.players.get(0).playerHand.add(this.players.get(0).chosenDeck.getCards().get(0));
         this.players.get(0).chosenDeck.getCards().remove(0);
