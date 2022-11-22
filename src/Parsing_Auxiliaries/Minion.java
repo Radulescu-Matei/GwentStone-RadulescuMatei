@@ -6,17 +6,22 @@ public class Minion extends Card {
     int health, attackDamage;
 
     int hasAttacked = 0, isFrozen = 0;
-    public void UseAbility(int row, int index, GameTable table){
-        if(this.name.equals("The Ripper")) {
-            WeakKnees(row, index, table);
-        }else if(this.name.equals("Mirage")) {
-            Skyjack(row, index, table);
-        }else if(this.name.equals("The Cursed One")) {
-            Shapeshift(row, index, table);
-        }else if(this.name.equals("Disciple")) {
-            GodsPlan(row, index, table);
-        }
+
+    public Minion (){
+
     }
+    public Minion(Minion minion){
+        this.health = minion.getHealth();
+        this.mana = minion.getMana();
+        this.name = minion.getName();
+        this.description = minion.getDescription();
+        this.attackDamage = minion.getAttackDamage();
+        this.colors = minion.getColors();
+        this.isFrozen = minion.isFrozen;
+        this.hasAttacked = minion.hasAttacked;
+    }
+
+
 
     public void inputMinion(CardInput cInp) {
         this.health = cInp.getHealth();
@@ -28,26 +33,12 @@ public class Minion extends Card {
 
     }
 
-
-
-    public void WeakKnees(int row, int index, GameTable table) {
-
+    public boolean hasTaunt(){
+        if(this.name.equals("Goliath") || this.name.equals("Warden")){
+            return true;
+        }
+        return false;
     }
-
-    public void Skyjack(int row, int index, GameTable table) {
-    }
-
-    public void Shapeshift(int row, int index, GameTable table) {
-
-    }
-
-    public void GodsPlan(int row, int index, GameTable table) {
-
-    }
-    public void Place() {
-
-    }
-
     public int getHealth() {
         return health;
     }
@@ -62,5 +53,21 @@ public class Minion extends Card {
 
     public int getIsFrozen() {
         return isFrozen;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public void setAttackDamage(int attackDamage) {
+        this.attackDamage = attackDamage;
+    }
+
+    public void setHasAttacked(int hasAttacked) {
+        this.hasAttacked = hasAttacked;
+    }
+
+    public void setIsFrozen(int isFrozen) {
+        this.isFrozen = isFrozen;
     }
 }

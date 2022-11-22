@@ -7,13 +7,15 @@ public class Player {
     Deck chosenDeck;
 
     int mana = 1;
+
+    int hasAttacked = 0;
     ArrayList<Card> playerHand = new ArrayList<Card>();
 
 
     Player(Hero chosenHero, Deck chosenDeck, int shuffleSeed) {
         this.chosenHero = chosenHero;
         this.chosenDeck = chosenDeck;
-
+        this.hasAttacked = 0;
         this.chosenDeck.ShuffleDeck(shuffleSeed);
     }
     public Deck getChosenDeck() {

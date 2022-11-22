@@ -32,7 +32,7 @@ public class GameInstances {
     }
 
     public void runGames(ArrayNode finalOut) {
-        for (int i = 0; i < games.size(); i++) {
+        for (int i = 0; i < this.games.size(); i++) {
             GameTable table = new GameTable(this.PlayerOneDecks.get(this.games.get(i).getStartGame().getPlayerOneDeckIdx()), this.PlayerTwoDecks.get(this.games.get(i).getStartGame().getPlayerTwoDeckIdx()), games.get(i).getActions(), this.games.get(i).getStartGame().getPlayerOneHero(), this.games.get(i).getStartGame().getPlayerTwoHero(), this.games.get(i).getStartGame().getStartingPlayer(), this.games.get(i).getStartGame().getShuffleSeed());
             table.executeGame(finalOut);
         }

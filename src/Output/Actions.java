@@ -150,6 +150,12 @@ public class Actions {
 
             Deck writeDeck = new Deck(frozen);
             writeDeck.writeDeck(aux);
+        }else if(action.getCommand().equals("cardUsesAttack")){
+            table.attackEnemy(aux, action);
+        }else if(action.getCommand().equals("cardUsesAbility")){
+            table.cardAbility(aux,action);
+        }else if(action.getCommand().equals("useAttackHero")){
+            table.attackHero(aux, action);
         }
     }
 }
