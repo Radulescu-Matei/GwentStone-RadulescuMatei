@@ -1,14 +1,12 @@
 package main;
 
-import Parsing_Auxiliaries.GameInstances;
+import auxilaries.GameInstances;
 import checker.Checker;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import checker.CheckerConstants;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.Input;
 
 import java.io.File;
@@ -19,7 +17,7 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 /**
- * The entry point to this homework. It runs the checker that tests your implentation.
+ * The entry point to this homework. It runs the checker that tests your implementation.
  */
 public final class Main {
     /**
@@ -31,10 +29,12 @@ public final class Main {
     /**
      * DO NOT MODIFY MAIN METHOD
      * Call the checker
+     *
      * @param args from command line
      * @throws IOException in case of exceptions to reading / writing
      */
-    public static void main(final String[] args) throws IOException {
+    public static void main(final String[] args)
+            throws IOException {
         File directory = new File(CheckerConstants.TESTS_PATH);
         Path path = Paths.get(CheckerConstants.RESULT_PATH);
 
@@ -65,7 +65,8 @@ public final class Main {
      * @throws IOException in case of exceptions to reading / writing
      */
     public static void action(final String filePath1,
-                              final String filePath2) throws IOException {
+                              final String filePath2)
+            throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         Input inputData = objectMapper.readValue(new File(CheckerConstants.TESTS_PATH + filePath1),
                 Input.class);
@@ -75,7 +76,6 @@ public final class Main {
         //TODO add here the entry point to your implementation
         GameInstances gameInstances = new GameInstances(inputData);
         gameInstances.runGames(output);
-
 
 
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
