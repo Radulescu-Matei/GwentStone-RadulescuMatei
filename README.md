@@ -1,44 +1,49 @@
+GwentStone - 2ndYear - Poo - Rădulescu Matei
 
 
-# Tema POO  - GwentStone
+This java programm implements a basic card game with the following rules:
 
-<div align="center"><img src="https://tenor.com/view/witcher3-gif-9340436.gif" width="500px"></div>
+Two players start playing as one of the 4 implemented heroes and a deck
+of cards, both given as imputs. All heroes have a special ability that
+affects the table of minions in some way. 
 
-#### Assignment Link: [https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema](https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema)
+In their deck they hold two type of cards:
 
+Minions: The minion cards need to be placed on a game table
+of 4x5 size, two rows are assigned to each player. This minions can attack
+each other, or the enemy hero or the one's that do have an ability
+can use it.
 
-## Skel Structure
-
-* src/
-  * checker/ - checker files
-  * fileio/ - contains classes used to read data from the json files
-  * main/
-      * Main - the Main class runs the checker on your implementation. Add the entry point to your implementation in it. Run Main to test your implementation from the IDE or from command line.
-      * Test - run the main method from Test class with the name of the input file from the command line and the result will be written
-        to the out.txt file. Thus, you can compare this result with ref.
-* input/ - contains the tests in JSON format
-* ref/ - contains all reference output for the tests in JSON format
-
-## Tests
-
-1. test01_game_start - 3p
-2. test02_place_card - 4p
-3. test03_place_card_invalid - 4p
-4. test04_use_env_card - 4p
-5. test05_use_env_card_invalid - 4p
-6. test06_attack_card - 4p
-7. test07_attack_card_invalid - 4p
-8. test08_use_card_ability - 4p
-9. test09_use_card_ability_invalid -4p
-10. test10_attack_hero - 4p
-11. test11_attack_hero_invalid - 4p
-12. test12_use_hero_ability_1 - 4p
-13. test13_use_hero_ability_2 - 4p
-14. test14_use_hero_ability_1_invalid - 4p
-15. test15_use_hero_ability_2_invalid - 4p
-16. test16_multiple_games_valid - 5p
-17. test17_multiple_games_invalid - 6p
-18. test18_big_game - 10p
+Environment: This cards affect the table of minions in some way similar to
+the hero cards abilities.
 
 
-<div align="center"><img src="https://tenor.com/view/homework-time-gif-24854817.gif" width="500px"></div>
+From the input classes which have the data from the given json files in them,
+information is moved to auxilaries classes used for implementing the game.
+
+This functionalities are implemented using a abstract class called card,
+which is extended into 3 diffent classes, representing the hero, the minions
+and the enviornment card types.
+
+The minion and environment cards are than stored inside several deck classes.
+This deck classes stored in a class called GameInstances which is used to play
+all of the games given as input.
+
+When a game starts a new class of the type GameTable is created in which each
+player's chosen deck is sent as well as the hero they will be using for the current
+game. Together with those a array of Actions, a class which stores the commands of
+the game, which are than executed so that the game may procced.
+
+The table were the minion need to be placed is implemented as and ArrayList which
+contains four other ArrayLists where the minions are to be played.
+
+Some of the basic commands are implemented directly in the Action class, by sending
+the information to the output json file through an auxiliary ObjectNode. The more
+complex one's ( attack, use ability, place minion, end turn ...) are implemented
+trrough their own methods that belong to the GameTable class.
+
+For executing multiple games every time the decks are reparsed every time, and three
+variables are used for statistic purposes such as games won by each player and total
+number of games played.
+
+More information can be found in the javadocs and comments placed in the code.

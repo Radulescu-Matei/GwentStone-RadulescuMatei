@@ -10,7 +10,8 @@ public final class Environment extends Card {
     }
 
     /**
-     * @param cInp
+     * @param cInp - input that holds the data for one card
+     * This method parses an environment card.
      */
     void inputEnvironment(final CardInput cInp) {
         this.setColors(cInp.getColors());

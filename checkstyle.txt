@@ -1,2 +1,4 @@
 Starting audit...
+[ERROR] C:\Users\radul\OneDrive\Desktop\GwentStone-POO-RadulescuMatei\.\src\auxilaries\GameTable.java:415:5: Method length is 163 lines (max allowed is 150). [MethodLength]
 Audit done.
+Checkstyle ends with 1 errors.

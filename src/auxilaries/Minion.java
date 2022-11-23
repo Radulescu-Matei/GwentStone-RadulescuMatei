@@ -26,7 +26,8 @@ public final class Minion extends Card {
 
     /**
      *
-     * @param cInp
+     * @param cInp - input that holds the data for one card
+     * This method is used to parse a minion card from input.
      */
     public void inputMinion(final CardInput cInp) {
         this.setHealth(cInp.getHealth());
@@ -41,6 +42,8 @@ public final class Minion extends Card {
     /**
      *
      * @return
+     * This method verifies where the minion it's applied to is one of the two that has the tank
+     * characteristic.
      */
     public boolean hasTaunt() {
         if (this.getName().equals("Goliath") || this.getName().equals("Warden")) {

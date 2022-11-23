@@ -19,7 +19,7 @@ public final class GameInstances {
     private Input input;
 
     /**
-     * @param input
+     * @param input - input class that holds the data from the json file
      */
     public GameInstances(final Input input) {
         this.input = input;
@@ -40,12 +40,17 @@ public final class GameInstances {
     }
 
     /**
-     * @param finalOut
+     * @param finalOut - ArrayNode used to write output is json file
+     * This method goes through the games array and executes all games one by one in order to get
+     * the output for each one, it also counts the number of games and each player's wins in order
+     * to give statistics in case multiple games are played.
      */
     public void runGames(final ArrayNode finalOut) {
         for (int j = 0; j < this.games.size(); j++) {
             this.playerOneDecks = new ArrayList<>();
             this.playerTwoDecks = new ArrayList<>();
+            // The decks are parsed again after each game, this is for running multiple games at
+            // once in order to make sure that the decks are not affected.
             for (int i = 0; i < input.getPlayerOneDecks().getNrDecks(); i++) {
 
                 Deck deck = new Deck(input.getPlayerOneDecks().getDecks().get(i),
@@ -59,6 +64,8 @@ public final class GameInstances {
                 this.playerTwoDecks.add(deck);
             }
             this.gamesPlayed++;
+            // A new gameTable is created every game with the required dat stored in it and than
+            // the executeGame method is called each time.
             GameTable table = new GameTable(
                     this.playerOneDecks.get(this.games.get(j).getStartGame().getPlayerOneDeckIdx()),
                     this.playerTwoDecks.get(this.games.get(j).getStartGame().getPlayerTwoDeckIdx()),

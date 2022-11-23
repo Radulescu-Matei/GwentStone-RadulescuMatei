@@ -10,6 +10,11 @@ public final class Hero extends Card {
         this.health = HERO_HEALTH;
     }
 
+    /**
+     *
+     * @param cInp - input that holds the data for one card
+     * This method is used to parse the hero cards from the input;
+     */
     Hero(final CardInput cInp) {
         this.setName(cInp.getName());
         this.setColors(cInp.getColors());

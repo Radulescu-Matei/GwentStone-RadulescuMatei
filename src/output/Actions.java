@@ -28,6 +28,9 @@ public final class Actions {
      *
      * @param finalOut
      * @param table
+     * This method goes through the ActionsInput array and checks every action, it than sends them
+     * to the checkCommand method which generates the output messages which are stored in the aux
+     * objectNode which is than stored in the finalOut node which is written in the output files.
      */
     public void addOutput(final ArrayNode finalOut, final GameTable table) {
         for (int i = 0; i < this.actions.size(); i++) {
@@ -39,6 +42,15 @@ public final class Actions {
         }
     }
 
+    /**
+     *
+     * @param action
+     * @param aux
+     * @param table
+     * This method contains an if / else implementation which checks which command is given through
+     * the action parameter and executes it. Most methods used here are implemented and explained in
+     * the GameTable file.
+     */
     void checkCommand(final ActionsInput action, final ObjectNode aux, final GameTable table) {
 
         if (action.getCommand().equals("getPlayerTurn")) {
@@ -62,7 +74,6 @@ public final class Actions {
         } else if (action.getCommand().equals("getPlayerDeck")) {
             Deck writeDeck;
             aux.put("command", action.getCommand());
-
 
             writeDeck = table.getPlayers().get(action.getPlayerIdx() - 1).getChosenDeck();
             ObjectNode helper = new ObjectNode(JsonNodeFactory.instance);

@@ -10,7 +10,7 @@ import java.util.Random;
 
 public final class Deck {
 
-    private ArrayList<Card> cards = new ArrayList<Card>();
+    private ArrayList<Card> cards = new ArrayList<>();
 
     public Deck(final ArrayList<Card> cards) {
 
@@ -20,8 +20,10 @@ public final class Deck {
     }
 
     /**
-     * @param deckInput
-     * @param size
+     * @param deckInput - array of card inputs used to parse a deck
+     * @param size - size of deck
+     * This method checks through the array of cards given as input and after it verifies if it
+     * is a minion or an environment type it uses the apropriate method to parse it.
      */
     Deck(final ArrayList<CardInput> deckInput, final int size) {
         for (int i = 0; i < size; i++) {
@@ -40,7 +42,8 @@ public final class Deck {
     }
 
     /**
-     * @param rndSeed
+     * @param rndSeed - seed used for shuffling decks
+     * This method uses the given seed to randomly shuffle a deck.
      */
     void shuffleDeck(final int rndSeed) {
         Random rnd = new Random(rndSeed);
@@ -48,7 +51,8 @@ public final class Deck {
     }
 
     /**
-     * @param aux
+     * @param aux - objectNode used as auxiliary for output
+     * This method writes an entire deck in an objectNode to be used for json files output.
      */
     public void writeDeck(final ObjectNode aux) {
         aux.putArray("output");
